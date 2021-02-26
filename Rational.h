@@ -16,13 +16,13 @@ public:
     Rational(const Rational& other);
 
     Rational reduce();
-    Rational neg();
-    Rational inv();
+    Rational neg() const;
+    Rational inv() const;
 
-    Rational sum(Rational other);
-    Rational sub(Rational other);
-    Rational mul(Rational other);
-    Rational div(Rational other);
+    Rational sum(const Rational& other);
+    Rational sub(const Rational& other);
+    Rational mul(const Rational& other);
+    Rational div(const Rational& other);
 
     bool equal(const Rational& other);
     bool notEqual(const Rational& other);

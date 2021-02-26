@@ -66,12 +66,12 @@ void Rational::scan() {
     std::cin >> _numerator >> c >> _denumerator;
 }
 
-Rational Rational::neg() {
+Rational Rational::neg() const {
     return Rational(-1*_numerator, _denumerator);
 }
 
 
-Rational Rational::inv() {
+Rational Rational::inv() const {
     if (_numerator < 0) {
         return Rational(-_denumerator, -_numerator);
     }
@@ -93,7 +93,7 @@ Rational Rational::reduce() {
     return Rational(sign * _numerator / d, _denumerator / d);
 }
 
-Rational Rational::sum(Rational other) {
+Rational Rational::sum(const Rational& other) {
     int num1, num2;
     num1 = _numerator;
     num2 = other._numerator;
@@ -112,18 +112,18 @@ Rational Rational::sum(Rational other) {
     return res.reduce();
 }
 
-Rational Rational::sub(Rational other) {
+Rational Rational::sub(const Rational& other) {
     return sum(other.neg());
 }
 
-Rational Rational::mul(Rational other) {
+Rational Rational::mul(const Rational& other) {
     Rational res(_numerator * other._numerator,
                  _denumerator * other._denumerator);
     
     return res.reduce();
 }
 
-Rational Rational::div(Rational other) {
+Rational Rational::div(const Rational& other) {
     return mul(other.inv());
 }
 
