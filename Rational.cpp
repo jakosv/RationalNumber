@@ -64,12 +64,12 @@ void Rational::print() {
 void Rational::scan() {
     char c;
     std::cin >> _numerator >> c >> _denumerator;
+    _nan = (_denumerator == 0);
 }
 
 Rational Rational::neg() const {
     return Rational(-1*_numerator, _denumerator);
 }
-
 
 Rational Rational::inv() const {
     if (_numerator < 0) {
@@ -80,30 +80,30 @@ Rational Rational::inv() const {
     }
 }
 
-Rational Rational::reduce() {
+Rational Rational::reduce() const {
     int sign = 1;
     if (_numerator < 0) {
         sign = -1;
-        _denumerator = -_denumerator;
     }
     int d = 1;
     if (!_nan) {
-        d = gcd(_numerator, _denumerator); 
+        d = gcd(sign * _numerator, _denumerator); 
     }
-    return Rational(sign * _numerator / d, _denumerator / d);
+    return Rational(_numerator / d, _denumerator / d);
 }
 
-Rational Rational::sum(const Rational& other) {
+Rational Rational::sum(const Rational& other) const {
     int num1, num2;
     num1 = _numerator;
     num2 = other._numerator;
-    int newDenumerator = lcm(_denumerator, other._denumerator);
+    int newDenumerator;
     if (_denumerator == 0 || other._denumerator == 0) {
         newDenumerator = 0;
-        num1 = 1;
-        num2 = 0;
+        num1 = 0;
+        num2 = 1;
     }
     else {
+        newDenumerator = lcm(_denumerator, other._denumerator);
         num1 *= newDenumerator / _denumerator;
         num2 *= newDenumerator / other._denumerator;
     }
@@ -112,83 +112,85 @@ Rational Rational::sum(const Rational& other) {
     return res.reduce();
 }
 
-Rational Rational::sub(const Rational& other) {
+Rational Rational::sub(const Rational& other) const {
     return sum(other.neg());
 }
 
-Rational Rational::mul(const Rational& other) {
+Rational Rational::mul(const Rational& other) const {
     Rational res(_numerator * other._numerator,
                  _denumerator * other._denumerator);
     
     return res.reduce();
 }
 
-Rational Rational::div(const Rational& other) {
+Rational Rational::div(const Rational& other) const {
     return mul(other.inv());
 }
 
-Rational Rational::operator+(const Rational& other) {
+Rational Rational::operator+(const Rational& other) const {
     return sum(other);
 }
 
-Rational Rational::operator-(const Rational& other) {
+Rational Rational::operator-(const Rational& other) const {
     return sub(other);
 }
 
-Rational Rational::operator*(const Rational& other) {
+Rational Rational::operator*(const Rational& other) const {
     return mul(other);
 }
 
-Rational Rational::operator/(const Rational& other) {
+Rational Rational::operator/(const Rational& other) const {
     return div(other);
 }
 
-bool Rational::equal(const Rational& other) {
+bool Rational::equal(const Rational& other) const {
     Rational res = *this - other;
-    return (res._numerator == 0);
+    return (res._numerator == 0 && !(_nan || other._nan));
 }
 
-bool Rational::notEqual(const Rational& other) {
-    return !equal(other);
+bool Rational::notEqual(const Rational& other) const {
+    std::cout << other._nan << " " << _nan << std::endl;
+    return (!equal(other) && !(_nan || other._nan));
 }
 
-bool Rational::less(const Rational& other) {
+bool Rational::less(const Rational& other) const {
     Rational res = *this - other;
-    return (res._numerator < 0);
+    return (res._numerator < 0 && !(_nan || other._nan));
 }
 
-bool Rational::lessOrEqual(const Rational& other) {
-    return (this->less(other) || this->equal(other));
+bool Rational::lessOrEqual(const Rational& other) const {
+    return ((this->less(other) || this->equal(other)) 
+            && !(_nan || other._nan));
 }
 
-bool Rational::greater(const Rational& other) {
-    return !this->lessOrEqual(other);
+bool Rational::greater(const Rational& other) const {
+    return (!this->lessOrEqual(other) && !(_nan || other._nan));
 }
 
-bool Rational::greaterOrEqual(const Rational& other) {
-    return !this->less(other);
+bool Rational::greaterOrEqual(const Rational& other) const {
+    return (!this->less(other) && !(_nan || other._nan));
 }
 
-bool Rational::operator<(const Rational& other) {
+bool Rational::operator<(const Rational& other) const {
     return less(other);    
 }
 
-bool Rational::operator>(const Rational& other) {
+bool Rational::operator>(const Rational& other) const {
     return greater(other);
 }
 
-bool Rational::operator<=(const Rational& other) {
+bool Rational::operator<=(const Rational& other) const {
     return lessOrEqual(other);
 }
 
-bool Rational::operator>=(const Rational& other) {
+bool Rational::operator>=(const Rational& other) const {
     return greaterOrEqual(other);
 }
 
-bool Rational::operator==(const Rational& other) {
+bool Rational::operator==(const Rational& other) const {
     return equal(other);
 }
     
-bool Rational::operator!=(const Rational& other) {
+bool Rational::operator!=(const Rational& other) const {
     return notEqual(other);
 }

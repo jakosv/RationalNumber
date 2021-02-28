@@ -15,35 +15,35 @@ public:
     Rational(const int x);
     Rational(const Rational& other);
 
-    Rational reduce();
+    Rational reduce() const;
     Rational neg() const;
     Rational inv() const;
 
-    Rational sum(const Rational& other);
-    Rational sub(const Rational& other);
-    Rational mul(const Rational& other);
-    Rational div(const Rational& other);
+    Rational sum(const Rational& other) const;
+    Rational sub(const Rational& other) const;
+    Rational mul(const Rational& other) const;
+    Rational div(const Rational& other) const;
 
-    bool equal(const Rational& other);
-    bool notEqual(const Rational& other);
-    bool less(const Rational& other);
-    bool lessOrEqual(const Rational& other);
-    bool greater(const Rational& other);
-    bool greaterOrEqual(const Rational& other);
+    bool equal(const Rational& other) const;
+    bool notEqual(const Rational& other) const;
+    bool less(const Rational& other) const;
+    bool lessOrEqual(const Rational& other) const;
+    bool greater(const Rational& other) const;
+    bool greaterOrEqual(const Rational& other) const;
 
     void print();
     void scan();
 
     Rational& operator=(const Rational& other);
     Rational& operator=(Rational&& other);
-    bool operator<(const Rational& other);
-    bool operator>(const Rational& other);
-    bool operator<=(const Rational& other);
-    bool operator>=(const Rational& other);
-    bool operator==(const Rational& other);
-    bool operator!=(const Rational& other);
-    Rational operator+(const Rational& other);
-    Rational operator-(const Rational& other);
-    Rational operator*(const Rational& other);
-    Rational operator/(const Rational& other);
+    bool operator<(const Rational& other) const;
+    bool operator>(const Rational& other) const;
+    bool operator<=(const Rational& other) const;
+    bool operator>=(const Rational& other) const;
+    bool operator==(const Rational& other) const;
+    bool operator!=(const Rational& other) const;
+    Rational operator+(const Rational& other) const;
+    Rational operator-(const Rational& other) const;
+    Rational operator*(const Rational& other) const;
+    Rational operator/(const Rational& other) const;
 };
