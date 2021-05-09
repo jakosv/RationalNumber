@@ -14,69 +14,71 @@ int lcm(int x, int y) {
 
 Rational::Rational() {
     _numerator = 1;
-    _denumerator = 1;
+    _denominator = 1;
     _nan = false;
 }
 
 Rational::Rational(const int x, const int y) {
     _numerator = x;
-    _denumerator = y;
+    _denominator = y;
     _nan = (y == 0);
 }
 
 Rational::Rational(const int x) {
     _numerator = x;
-    _denumerator = 1;
+    _denominator = 1;
     _nan = false;
 }
 
 Rational::Rational(const Rational& other) {
     _numerator = other._numerator;
-    _denumerator = other._denumerator;
+    _denominator = other._denominator;
     _nan = other._nan;
 }
 
 Rational& Rational::operator=(const Rational& other) {
     _numerator = other._numerator;
-    _denumerator = other._denumerator;
+    _denominator = other._denominator;
     _nan = other._nan;
+    return *this;
 }
 
 Rational& Rational::operator=(Rational&& other) {
     _numerator = other._numerator;
-    _denumerator = other._denumerator;
+    _denominator = other._denominator;
     _nan = other._nan;
+    return *this;
 }
 
-void Rational::print() {
+void Rational::print(std::ostream& out, bool lineBreak) const {
     if (_nan) {
-        std::cout << "NaN" << std::endl;
+        out << "NaN";
     }
     else {
-        std::cout 
-            << _numerator
-            << "/"
-            << _denumerator
-            << std::endl;
+        out << _numerator << "/" << _denominator;
+    }
+    
+    if (lineBreak) {
+        out << std::endl;
     }
 }
 
-void Rational::scan() {
+void Rational::scan(std::istream& in) {
     char c;
-    std::cin >> _numerator >> c >> _denumerator;
-    _nan = (_denumerator == 0);
+    in >> _numerator >> c >> _denominator;
+    _nan = (_denominator == 0);
 }
 
 Rational Rational::neg() const {
-    return Rational(-1*_numerator, _denumerator);
+    return Rational(-1*_numerator, _denominator);
 }
 
 Rational Rational::inv() const {
     if (_numerator < 0) {
-        return Rational(-_denumerator, -_numerator);
+        return Rational(-_denominator, -_numerator);
     }
     else {
-        return Rational(_denumerator, _numerator);
+        return Rational(_denominator, _numerator);
     }
 }
 
@@ -87,9 +89,9 @@ Rational Rational::reduce() const {
     }
     int d = 1;
     if (!_nan) {
-        d = gcd(sign * _numerator, _denumerator); 
+        d = gcd(sign * _numerator, _denominator); 
     }
-    return Rational(_numerator / d, _denumerator / d);
+    return Rational(_numerator / d, _denominator / d);
 }
 
 Rational Rational::sum(const Rational& other) const {
@@ -97,15 +99,15 @@ Rational Rational::sum(const Rational& other) const {
     num1 = _numerator;
     num2 = other._numerator;
     int newDenumerator;
-    if (_denumerator == 0 || other._denumerator == 0) {
+    if (_denominator == 0 || other._denominator == 0) {
         newDenumerator = 0;
         num1 = 0;
         num2 = 1;
     }
     else {
-        newDenumerator = lcm(_denumerator, other._denumerator);
-        num1 *= newDenumerator / _denumerator;
-        num2 *= newDenumerator / other._denumerator;
+        newDenumerator = lcm(_denominator, other._denominator);
+        num1 *= newDenumerator / _denominator;
+        num2 *= newDenumerator / other._denominator;
     }
     Rational res(num1 + num2, newDenumerator);
 
@@ -118,7 +120,7 @@ Rational Rational::sub(const Rational& other) const {
 
 Rational Rational::mul(const Rational& other) const {
     Rational res(_numerator * other._numerator,
-                 _denumerator * other._denumerator);
+                 _denominator * other._denominator);
     
     return res.reduce();
 }
@@ -193,4 +195,14 @@ bool Rational::operator==(const Rational& other) const {
     
 bool Rational::operator!=(const Rational& other) const {
     return notEqual(other);
+}
+
+std::ostream& operator<<(std::ostream& out, const Rational& num) {
+    num.print(out, false); 
+    return out;
+}
+
+std::istream& operator>>(std::istream& in, Rational& num) {
+    num.scan(in);
+    return in;
 }

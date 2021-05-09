@@ -7,7 +7,7 @@ class Rational {
 private:
     bool _nan;
     int _numerator;
-    int _denumerator;
+    int _denominator;
 public:
 
     Rational();
@@ -31,9 +31,8 @@ public:
     bool greater(const Rational& other) const;
     bool greaterOrEqual(const Rational& other) const;
 
-    void print();
-    void scan();
-
+    void print(std::ostream& out = std::cout, bool lineBreak = true) const;
+    void scan(std::istream& in = std::cin);
     Rational& operator=(const Rational& other);
     Rational& operator=(Rational&& other);
     bool operator<(const Rational& other) const;
@@ -47,3 +46,6 @@ public:
     Rational operator*(const Rational& other) const;
     Rational operator/(const Rational& other) const;
 };
+
+std::ostream& operator<<(std::ostream& in, const Rational& num);
+std::istream& operator>>(std::istream& out, Rational& num);
